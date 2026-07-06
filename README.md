@@ -8,10 +8,61 @@ Open RAG is a local, script-first retrieval stack with an optional local model r
 - Root `*.py` files: compatibility shims so legacy direct calls like `python phase1a_retrieval.py` still work.
 - `docs/`: canonical markdown documentation location.
 
+## What this solves
+
+- Reduce token spend by grounding LLM questions in local evidence packets first.
+- Improve coding-agent reliability by requiring repo evidence before expensive model calls.
+- Speed up review and onboarding with fast answers to "where/how/why" questions in code and docs.
+- Preserve privacy and offline workflows by running retrieval and runtime locally.
+
+## Use cases
+
+- **Token-efficient coding assistant:** retrieve evidence for model prompts instead of full-file context dumps.
+- **Cyxcode integration:** pre-tool skill for context-first code edits and reviews.
+- **Codebase Q&A:** map architecture, ownership, and behavior quickly across a repo.
+- **Compliance and drift checks:** track fallback hits and packet misses to decide when indexing or memory should expand.
+
+## Use cases by phase
+
 - **Phase 1A**: lexical index, search, and evidence packets (`phase1a_retrieval.py`)
 - **Phase 1B**: strict evidence prompts and optional local JSON runtime adapter (`phase1b_answer.py`)
 - **Phase 8**: prebuilt knowledge packs for fast reloads (`phase8_knowledge_pack.py`)
 - **Cyxcode contract**: local-only retrieval-first skill contract (`open_rag_skill_contract.md`)
+
+## Usage instructions
+
+Yes. This file already contains the full usage path. The minimum viable flow is:
+
+1. Configure a project-specific file:
+
+   ```bash
+   cp open_rag_config.example.json open_rag_config.json
+   ```
+
+2. Build or refresh local index:
+
+   ```bash
+   open-rag-build --index /tmp/open_rag_index.json --config open_rag_config.json
+   ```
+
+3. Run a packet query:
+
+   ```bash
+   open-rag-query --index /tmp/open_rag_index.json --config open_rag_config.json "How does this project initialize?" --top 5 --json
+   ```
+
+4. Validate packet quality:
+
+   ```bash
+   open-rag-query --index /tmp/open_rag_index.json --config open_rag_config.json packet "How does this project initialize?" --top 5 --json | python phase1b_answer.py check --packet - --max-chars-per-evidence 1200
+   ```
+
+5. Optional local runtime (for model answer):
+
+   ```bash
+   open-rag-serve --host 127.0.0.1 --port 8768 --upstream http://127.0.0.1:1234/v1/chat/completions
+   open-rag-query --index /tmp/open_rag_index.json --config open_rag_config.json packet "How does this project initialize?" --top 5 --json | python phase1b_answer.py answer --runtime json-http --endpoint http://127.0.0.1:8768/completion --max-tokens 512 --json
+   ```
 
 ## Why this design now
 
@@ -202,11 +253,11 @@ If the server returns 503 on first request, it is often still starting the model
 ## Files worth reading first
 
 - `open_rag_config.example.json` - CLI config starting point
-- `phase1a_retrieval.md` - retrieval CLI contract and saved query behavior
-- `phase1b_answer.md` - strict prompt format and runtime modes
-- `phase8_knowledge_pack.md` - pack format and validation
-- `open_rag_skill_contract.md` - cyxcode integration contract
-- `done1.md` - post-Qodo design update considerations
+- `docs/phase1a_retrieval.md` - retrieval CLI contract and saved query behavior
+- `docs/phase1b_answer.md` - strict prompt format and runtime modes
+- `docs/phase8_knowledge_pack.md` - pack format and validation
+- `docs/open_rag_skill_contract.md` - cyxcode integration contract
+- `docs/done1.md` - post-Qodo design update considerations
 - `CONTRIBUTING.md` - contribution checklist and expectations
 - `SECURITY.md` - local/runtime security guidance
 - `CHANGELOG.md` - release notes
