@@ -1,0 +1,29 @@
+{
+  "schema": "open_rag.phase1a.config.v1",
+  "project_root": ".",
+  "source_patterns": [
+    "README*",
+    "docs/**/*.md",
+    "src/**/*.md",
+    "src/**/*.py",
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.cpp",
+    "src/**/*.hpp",
+    "src/**/*.h",
+    "src/**/*.cc",
+    "src/**/*.cxx",
+    "src/**/*.c",
+    "src/**/*.json"
+  ],
+  "saved_queries": [
+    {
+      "name": "project_overview",
+      "description": "Project docs and usage entry points.",
+      "query": "project overview",
+      "source_types": ["markdown"],
+      "path_contains": ["readme"]
+    }
+  ],
+  "success_checks": []
+}

@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "open-rag"
+version = "0.1.0"
+description = "Open RAG: local, retrieval-first codebase question answering."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "CyxWiz" }]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Software Development :: Build Tools",
+]
+
+[project.scripts]
+open-rag-build = "open_rag_cli:build"
+open-rag-query = "open_rag_cli:query"
+open-rag-serve = "open_rag_cli:serve"
+
+[tool.setuptools]
+py-modules = [
+  "open_rag_cli",
+  "phase1a_retrieval",
+  "phase1b_answer",
+  "phase2_openai_compat_proxy",
+]

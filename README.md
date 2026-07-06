@@ -1,4 +1,4 @@
-# Open RAG
+﻿# Open RAG
 
 Open RAG is a local, script-first retrieval stack with an optional local model runtime.
 
@@ -198,7 +198,7 @@ If the server returns 503 on first request, it is often still starting the model
 - `phase1b_answer.md` - strict prompt format and runtime modes
 - `phase8_knowledge_pack.md` - pack format and validation
 - `open_rag_skill_contract.md` - cyxcode integration contract
-- `todo1.md` - post-Qodo design update considerations
+- `done1.md` - post-Qodo design update considerations
 - `CONTRIBUTING.md` - contribution checklist and expectations
 - `SECURITY.md` - local/runtime security guidance
 - `CHANGELOG.md` - release notes
