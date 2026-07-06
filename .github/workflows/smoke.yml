@@ -1,0 +1,35 @@
+name: RAG Smoke
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  smoke:
+    name: Build, Search, Packet, and Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Smoke test Open RAG pipeline
+        env:
+          OPENRAG_INDEX: /tmp/open_rag_ci_index.json
+          OPENRAG_PACKET: /tmp/open_rag_ci_packet.json
+          OPENRAG_SEARCH: /tmp/open_rag_ci_search.json
+        run: |
+          python -m pip install -e . --no-deps -q
+          python phase1a_retrieval.py --index "$OPENRAG_INDEX" --config open_rag_config.example.json build --incremental
+          python phase1a_retrieval.py --index "$OPENRAG_INDEX" --config open_rag_config.example.json search "open rag" --top 3 --json > "$OPENRAG_SEARCH"
+          python phase1a_retrieval.py --index "$OPENRAG_INDEX" --config open_rag_config.example.json packet "How do I run open-rag-query?" --top 3 --json > "$OPENRAG_PACKET"
+          python phase1b_answer.py check --packet "$OPENRAG_PACKET" --max-chars-per-evidence 1200
