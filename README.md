@@ -203,5 +203,5 @@ If the server returns 503 on first request, it is often still starting the model
 - `SECURITY.md` - local/runtime security guidance
 - `CHANGELOG.md` - release notes
 - `LICENSE` - MIT-licensed project usage terms (replace if you need a different license)
-#   C Y X R A G  
- 
+# CYXRAG
+
