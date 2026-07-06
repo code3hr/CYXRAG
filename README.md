@@ -2,6 +2,12 @@
 
 Open RAG is a local, script-first retrieval stack with an optional local model runtime.
 
+## Project layout (current)
+
+- `open_rag/`: source package (all executable modules).
+- Root `*.py` files: compatibility shims so legacy direct calls like `python phase1a_retrieval.py` still work.
+- `docs/`: canonical markdown documentation location.
+
 - **Phase 1A**: lexical index, search, and evidence packets (`phase1a_retrieval.py`)
 - **Phase 1B**: strict evidence prompts and optional local JSON runtime adapter (`phase1b_answer.py`)
 - **Phase 8**: prebuilt knowledge packs for fast reloads (`phase8_knowledge_pack.py`)
@@ -39,8 +45,8 @@ cp open_rag_config.example.json open_rag_config.json
 Use a stable index path per project:
 
 ```bash
-python phase1a_retrieval.py --index /tmp/open_rag_index.json --config open_rag_config.json build
-python phase1a_retrieval.py --index /tmp/open_rag_index.json --config open_rag_config.json search "your question" --top 5 --json
+open-rag-build --index /tmp/open_rag_index.json --config open_rag_config.json
+open-rag-query --index /tmp/open_rag_index.json --config open_rag_config.json search "your question" --top 5 --json
 ```
 
 ### Installed CLI (optional)
@@ -81,12 +87,14 @@ Bounded fallback knobs:
 Periodic telemetry:
 
 ```bash
-python phase1a_retrieval.py fallback-report --index /tmp/open_rag_index.json
-python phase1a_retrieval.py fallback-report --index /tmp/open_rag_index.json --json
+open-rag-query --index /tmp/open_rag_index.json fallback-report
+open-rag-query --index /tmp/open_rag_index.json fallback-report --json
 ```
-or through the installed entry point:
+
+Legacy-compatible direct command equivalent:
+
 ```bash
-open-rag-query fallback-report --index /tmp/open_rag_index.json --json
+python phase1a_retrieval.py fallback-report --index /tmp/open_rag_index.json
 ```
 
 ### Deciding when to index
@@ -130,14 +138,14 @@ If `fallback_used` is true and `source_miss` is true, the query is a miss under 
 Build a packet and run retrieval-only validation:
 
 ```bash
-python phase1a_retrieval.py --index /tmp/open_rag_index.json --config open_rag_config.json packet "How does this project initialize?" --top 5 --json \
+open-rag-query --index /tmp/open_rag_index.json --config open_rag_config.json packet "How does this project initialize?" --top 5 --json \
   | python phase1b_answer.py check --packet - --max-chars-per-evidence 1200
 ```
 
 If you need a runtime answer, keep runtime optional:
 
 ```bash
-python phase1a_retrieval.py --index /tmp/open_rag_index.json --config open_rag_config.json packet "How does this project initialize?" --top 5 --json \
+open-rag-query --index /tmp/open_rag_index.json --config open_rag_config.json packet "How does this project initialize?" --top 5 --json \
   | python phase1b_answer.py answer --runtime json-http --endpoint http://127.0.0.1:8768/completion --max-tokens 512 --json
 ```
 
@@ -203,5 +211,4 @@ If the server returns 503 on first request, it is often still starting the model
 - `SECURITY.md` - local/runtime security guidance
 - `CHANGELOG.md` - release notes
 - `LICENSE` - MIT-licensed project usage terms (replace if you need a different license)
-# CYXRAG
 

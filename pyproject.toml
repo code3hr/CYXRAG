@@ -19,14 +19,9 @@ classifiers = [
 ]
 
 [project.scripts]
-open-rag-build = "open_rag_cli:build"
-open-rag-query = "open_rag_cli:query"
-open-rag-serve = "open_rag_cli:serve"
+open-rag-build = "open_rag.open_rag_cli:build"
+open-rag-query = "open_rag.open_rag_cli:query"
+open-rag-serve = "open_rag.open_rag_cli:serve"
 
 [tool.setuptools]
-py-modules = [
-  "open_rag_cli",
-  "phase1a_retrieval",
-  "phase1b_answer",
-  "phase2_openai_compat_proxy",
-]
+packages = ["open_rag"]
