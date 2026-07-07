@@ -27,9 +27,14 @@ jobs:
           OPENRAG_INDEX: /tmp/open_rag_ci_index.json
           OPENRAG_PACKET: /tmp/open_rag_ci_packet.json
           OPENRAG_SEARCH: /tmp/open_rag_ci_search.json
+          OPENRAG_EXAMPLE_INDEX: /tmp/open_rag_dummy_ci_index.json
+          OPENRAG_EXAMPLE_PACKET: /tmp/open_rag_dummy_ci_packet.json
         run: |
           python -m pip install -e . --no-deps -q
           python phase1a_retrieval.py --index "$OPENRAG_INDEX" --config open_rag_config.example.json build --incremental
           python phase1a_retrieval.py --index "$OPENRAG_INDEX" --config open_rag_config.example.json search "open rag" --top 3 --json > "$OPENRAG_SEARCH"
           python phase1a_retrieval.py --index "$OPENRAG_INDEX" --config open_rag_config.example.json packet "How do I run open-rag-query?" --top 3 --json > "$OPENRAG_PACKET"
           python phase1b_answer.py check --packet "$OPENRAG_PACKET" --max-chars-per-evidence 1200
+          python phase1a_retrieval.py --index "$OPENRAG_EXAMPLE_INDEX" --config examples/dummy_project/open_rag_config.json build
+          python phase1a_retrieval.py --index "$OPENRAG_EXAMPLE_INDEX" --config examples/dummy_project/open_rag_config.json packet "How does dummy trade approval work?" --source-type markdown --top 5 --json > "$OPENRAG_EXAMPLE_PACKET"
+          python phase1b_answer.py check --packet "$OPENRAG_EXAMPLE_PACKET" --max-chars-per-evidence 1200

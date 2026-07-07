@@ -64,6 +64,39 @@ Yes. This file already contains the full usage path. The minimum viable flow is:
    open-rag-query --index /tmp/open_rag_index.json --config open_rag_config.json packet "How does this project initialize?" --top 5 --json | python phase1b_answer.py answer --runtime json-http --endpoint http://127.0.0.1:8768/completion --max-tokens 512 --json
    ```
 
+## Example project
+
+For a small runnable example, see `examples/dummy_project/`.
+
+```bash
+python phase1a_retrieval.py --index /tmp/open_rag_dummy_index.json --config examples/dummy_project/open_rag_config.json build
+python phase1a_retrieval.py --index /tmp/open_rag_dummy_index.json --config examples/dummy_project/open_rag_config.json search "How does dummy trade approval work?" --source-type markdown --top 5 --json
+python phase1a_retrieval.py --index /tmp/open_rag_dummy_index.json --config examples/dummy_project/open_rag_config.json packet "How does dummy trade approval work?" --source-type markdown --top 5 --json | python phase1b_answer.py check --packet - --max-chars-per-evidence 1200
+```
+
+The example mirrors the intended user flow:
+
+1. add an `open_rag_config.json` to a project,
+2. build a local index,
+3. ask a focused question,
+4. validate the packet before spending model tokens.
+
+## Local model expectations
+
+Open RAG separates retrieval quality from model quality.
+
+In a real mixed codebase test, retrieval and packet validation worked correctly.
+A small local 3B coder model could answer a focused question from evidence, but it
+struggled to follow strict section formatting and timed out on a larger packet.
+
+Practical guidance:
+
+- use `--top 2` or `--top 3` for small local models,
+- keep `--max-chars-per-evidence` around `500-800` when latency matters,
+- treat Phase 1A packets as the reliable grounding layer,
+- treat model answers as optional runtime output,
+- use a stronger local model when strict structured answers are required.
+
 ## Why this design now
 
 This project intentionally follows the same direction described in Qodo's 2026 review of RAG:
@@ -253,6 +286,7 @@ If the server returns 503 on first request, it is often still starting the model
 ## Files worth reading first
 
 - `open_rag_config.example.json` - CLI config starting point
+- `examples/README.md` - runnable example project and commands
 - `docs/phase1a_retrieval.md` - retrieval CLI contract and saved query behavior
 - `docs/phase1b_answer.md` - strict prompt format and runtime modes
 - `docs/phase8_knowledge_pack.md` - pack format and validation

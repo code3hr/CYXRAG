@@ -1,0 +1,19 @@
+{
+  "schema": "open_rag.phase1a.config.v1",
+  "project_root": ".",
+  "source_patterns": [
+    "README.md",
+    "docs/**/*.md",
+    "src/**/*.py",
+    "tests/**/*.py"
+  ],
+  "saved_queries": [
+    {
+      "name": "approval_policy",
+      "description": "How dummy trade approval works.",
+      "query": "dummy trade approval policy buyer seller amount limit",
+      "source_types": ["markdown"]
+    }
+  ],
+  "success_checks": []
+}
