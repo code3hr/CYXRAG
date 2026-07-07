@@ -38,3 +38,4 @@ jobs:
           python phase1a_retrieval.py --index "$OPENRAG_EXAMPLE_INDEX" --config examples/dummy_project/open_rag_config.json build
           python phase1a_retrieval.py --index "$OPENRAG_EXAMPLE_INDEX" --config examples/dummy_project/open_rag_config.json packet "How does dummy trade approval work?" --source-type markdown --top 5 --json > "$OPENRAG_EXAMPLE_PACKET"
           python phase1b_answer.py check --packet "$OPENRAG_EXAMPLE_PACKET" --max-chars-per-evidence 1200
+          python open_rag_benchmark.py --config examples/dummy_project/open_rag_config.json --source-type markdown --top 5 "How does dummy trade approval work?"

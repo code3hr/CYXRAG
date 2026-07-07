@@ -2,6 +2,7 @@
 
 __all__ = [
     "open_rag_cli",
+    "benchmark",
     "phase1a_retrieval",
     "phase1b_answer",
     "phase2_endpoint_doctor",

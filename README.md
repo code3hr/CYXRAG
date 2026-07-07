@@ -149,6 +149,7 @@ open-rag-query --index /tmp/open_rag_index.json --config open_rag_config.json "H
 open-rag-query --index /tmp/open_rag_index.json --mode fetch-first --no-index "Where is this project documented?" --top 5 --json
 open-rag-query --index /tmp/open_rag_index.json --mode memory-first --memory-only --memory-path /tmp/open_rag_memory.json "Which policy applies to error handling?" --top 5 --json
 open-rag-serve --host 127.0.0.1 --port 8768 --upstream http://127.0.0.1:1234/v1/chat/completions
+open-rag-benchmark --config open_rag_config.json --index /tmp/open_rag_benchmark_index.json --top 5 "How does this project initialize?"
 ```
 
 These command names map directly to existing scripts without changing default behavior.
@@ -183,6 +184,17 @@ Legacy-compatible direct command equivalent:
 ```bash
 python phase1a_retrieval.py fallback-report --index /tmp/open_rag_index.json
 ```
+
+Benchmark token savings and retrieval timing:
+
+```bash
+open-rag-benchmark --config open_rag_config.json --index /tmp/open_rag_benchmark_index.json --top 5 "How does this project initialize?"
+open-rag-benchmark --config open_rag_config.json --source-type markdown --top 5 "Where is project ownership documented?" --json
+```
+
+The benchmark compares estimated tokens for a prompt containing all indexed
+content against the Phase 1B evidence-packet prompt. Token counts are estimates
+using `ceil(characters / 4)` because exact tokenizer counts vary by model.
 
 ### Deciding when to index
 
@@ -293,6 +305,7 @@ model answer, see `examples/README.md`.
 
 - `open_rag_config.example.json` - CLI config starting point
 - `examples/README.md` - runnable example project and commands
+- `docs/BENCHMARKS.md` - token reduction and timing benchmark notes
 - `docs/phase1a_retrieval.md` - retrieval CLI contract and saved query behavior
 - `docs/phase1b_answer.md` - strict prompt format and runtime modes
 - `docs/phase8_knowledge_pack.md` - pack format and validation

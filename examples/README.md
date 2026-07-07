@@ -17,6 +17,7 @@ python phase1a_retrieval.py --index /tmp/open_rag_dummy_index.json --config exam
 python phase1a_retrieval.py --index /tmp/open_rag_dummy_index.json --config examples/dummy_project/open_rag_config.json search "How does dummy trade approval work?" --source-type markdown --top 5 --json
 python phase1a_retrieval.py --index /tmp/open_rag_dummy_index.json --config examples/dummy_project/open_rag_config.json packet "How does dummy trade approval work?" --source-type markdown --top 5 --json > /tmp/open_rag_dummy_packet.json
 python phase1b_answer.py check --packet /tmp/open_rag_dummy_packet.json --max-chars-per-evidence 1200
+python open_rag_benchmark.py --config examples/dummy_project/open_rag_config.json --source-type markdown --top 5 "How does dummy trade approval work?"
 ```
 
 This mirrors the real-project flow:

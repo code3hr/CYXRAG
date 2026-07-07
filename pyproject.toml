@@ -22,6 +22,7 @@ classifiers = [
 open-rag-build = "open_rag.open_rag_cli:build"
 open-rag-query = "open_rag.open_rag_cli:query"
 open-rag-serve = "open_rag.open_rag_cli:serve"
+open-rag-benchmark = "open_rag.benchmark:main"
 
 [tool.setuptools]
 packages = ["open_rag"]
