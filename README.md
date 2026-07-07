@@ -66,7 +66,9 @@ Yes. This file already contains the full usage path. The minimum viable flow is:
 
 ## Example project
 
-For a small runnable example, see `examples/dummy_project/`.
+For a small runnable example, see `examples/dummy_project/`. The full walkthrough
+in `examples/README.md` shows both retrieval-only usage and local model usage
+with `llama-server`.
 
 ```bash
 python phase1a_retrieval.py --index /tmp/open_rag_dummy_index.json --config examples/dummy_project/open_rag_config.json build
@@ -79,7 +81,8 @@ The example mirrors the intended user flow:
 1. add an `open_rag_config.json` to a project,
 2. build a local index,
 3. ask a focused question,
-4. validate the packet before spending model tokens.
+4. validate the packet before spending model tokens,
+5. optionally send the packet to `llama-server` with `phase1b_answer.py answer`.
 
 ## Local model expectations
 
@@ -282,6 +285,9 @@ Invoke-RestMethod -Uri "http://127.0.0.1:8768/completion" `
 A successful response contains text in `content`.
 
 If the server returns 503 on first request, it is often still starting the model. Wait a few seconds and retry.
+
+For a complete runnable flow that starts from a sample project and ends with a
+model answer, see `examples/README.md`.
 
 ## Files worth reading first
 
